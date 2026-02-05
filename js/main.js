@@ -1,40 +1,49 @@
 import { showScreen } from "./router.js";
+import { gameState, resetGame, resetRound } from "./state.js";
 
 // Start in menu
 showScreen("menu");
+console.log("INIT STATE:", gameState);
 
 // Test buttons
 // Play -> Map
 //      -> Instructions
 document.getElementById("btn-play").addEventListener("click", () => {
-  showScreen("map");
+    showScreen("map");
+    console.log("STATE:", gameState);
 });
 
 document.getElementById("btn-instructions").addEventListener("click", () => {
-  showScreen("instructions");
+    showScreen("instructions");
+    console.log("STATE:", gameState);
 });
 
 // Map -> Menu
 //     -> Game
 document.getElementById("btn-back-to-menu").addEventListener("click", () => {
-  showScreen("menu");
+    showScreen("menu");
+    console.log("STATE:", gameState);
 });
 
 document.getElementById("btn-start").addEventListener("click", () => {
-  showScreen("game");
+    showScreen("game");
+    console.log("STATE:", gameState);
 });
 
 // Game -> End
 document.getElementById("btn-finish-round").addEventListener("click", () => {
-  showScreen("end");
+    showScreen("end");
+    console.log("STATE:", gameState);
 });
 
 // End -> Menu
 //     -> Map
 document.getElementById("btn-end-to-menu").addEventListener("click", () => {
-  showScreen("menu");
+    showScreen("menu");
+    console.log("STATE:", gameState);
 });
 
 document.getElementById("btn-replay").addEventListener("click", () => {
-  showScreen("map");
+    showScreen("map");
+    console.log("STATE:", gameState);
 });
