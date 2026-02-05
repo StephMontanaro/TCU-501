@@ -11,6 +11,7 @@ console.log("INIT STATE:", gameState);
 //      -> Instructions
 document.getElementById("btn-play").addEventListener("click", () => {
     showScreen("map");
+    renderPlaceButtons();
     console.log("STATE:", gameState);
     console.log("PLACES:", PLACES);
 });
@@ -22,9 +23,14 @@ document.getElementById("btn-instructions").addEventListener("click", () => {
 
 // Map -> Menu
 //     -> Game
-document.getElementById("btn-back-to-menu").addEventListener("click", () => {
+document.addEventListener("click", (e) => {
+  const action = e.target?.dataset?.action;
+  if (!action) return;
+
+  if (action === "back-to-menu") {
     showScreen("menu");
     console.log("STATE:", gameState);
+  }
 });
 
 document.getElementById("btn-start").addEventListener("click", () => {
@@ -38,15 +44,27 @@ document.getElementById("btn-finish-round").addEventListener("click", () => {
     console.log("STATE:", gameState);
 });
 
-// End -> Menu
+// End -> Menu (back-to-menu)
 //     -> Map
-document.getElementById("btn-end-to-menu").addEventListener("click", () => {
+/*document.getElementById("btn-end-to-menu").addEventListener("click", () => {
     showScreen("menu");
     console.log("STATE:", gameState);
-});
+});*/
 
 document.getElementById("btn-replay").addEventListener("click", () => {
     showScreen("map");
     console.log("STATE:", gameState);
 });
 
+// Show list of possible destiantions
+function renderPlaceButtons() {
+  const placeListEl = document.getElementById("place-list");
+  placeListEl.innerHTML = "";
+
+  PLACES.forEach((place) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = `${place.name}`;
+    placeListEl.appendChild(btn);
+  });
+}

@@ -28,7 +28,7 @@
             ========================= -->
         <section id="screen-instructions" class = "screen hidden">
             <h2>Instructions</h2>
-            <button id="btn-back-to-menu">Menu</button>
+            <button data-action="back-to-menu">Menu</button>
         </section>
 
         <!-- =========================
@@ -38,8 +38,12 @@
             ========================= -->
         <section id="screen-map" class = "screen hidden">
             <h2>Select a place</h2>
-            <button id="btn-back-to-menu">Menu</button>
-            <button id="btn-start">Start</button>
+
+            <div id="place-list"></div>
+            <p id="map-selection"></p>
+
+            <button data-action="back-to-menu">Menu</button>
+            <button id="btn-start" disabled>Start</button>
         </section>
         
         <!-- =========================
@@ -58,7 +62,7 @@
         <section id="screen-end" class = "screen hidden">
             <h2>Complete</h2>
             <button id="btn-replay">Play again</button>
-            <button id="btn-end-to-menu">Menu</button>
+            <button data-action="back-to-menu">Menu</button>
         </section>
 
     </main>
