@@ -1,21 +1,59 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TCU-501</title>
-  <link rel="stylesheet" href="css/styles.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TCU-501</title>
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header>
-    <h1>Where are you going?</h1>
-  </header>
+    <header>
+        <h1>Where are you going?</h1>
+    </header>
 
-  <main id="app">
-    <p>PLAY</p>
-    <button id="btnStart">START</button>
-  </main>
+    <main id="app">
+        <!-- =========================
+            MENU SCREEN
+            Initial game screen
+            (Play, Instructions, About, Credits)
+            ========================= -->
+        <section id="screen-menu" class = "screen">
+            <button id="btn-play">Play</button>
+            <button id="btn-instructions">Instructions</button>
+        </section>
 
-  <script src="js/main.js" defer></script>
+        <!-- =========================
+            MAP SCREEN
+            Destination selection
+            (Difficulty selection)
+            ========================= -->
+        <section id="screen-map" class = "screen hidden">
+            <h2>Select a place</h2>
+            <button id="btn-back-to-menu">Menu</button>
+            <button id="btn-start">Start</button>
+        </section>
+        
+        <!-- =========================
+            GAME SCREEN
+            Directions and user input
+            ========================= -->
+        <section id="screen-game" class = "screen hidden">
+            <h2>Directions</h2>
+            <button id="btn-finish-round">Finish (test)</button>
+        </section>
+
+        <!-- =========================
+            RESULT SCREEN
+            End of each round
+            ========================= -->
+        <section id="screen-end" class = "screen hidden">
+            <h2>Complete</h2>
+            <button id="btn-replay">Play again</button>
+            <button id="btn-end-to-menu">Menu</button>
+        </section>
+
+    </main>
+
+    <script type="module" src="./js/main.js"></script>
 </body>
 </html>
