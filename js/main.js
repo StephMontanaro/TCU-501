@@ -24,18 +24,24 @@ document.getElementById("btn-instructions").addEventListener("click", () => {
 // Map -> Menu
 //     -> Game
 document.addEventListener("click", (e) => {
-  const action = e.target?.dataset?.action;
-  if (!action) return;
+    const action = e.target?.dataset?.action;
+    if (!action) return;
 
-  if (action === "back-to-menu") {
-    showScreen("menu");
-    console.log("STATE:", gameState);
-  }
+    if (action === "back-to-menu") {
+        showScreen("menu");
+        console.log("STATE:", gameState);
+    }
 });
 
 document.getElementById("btn-start").addEventListener("click", () => {
+    if (!gameState.place) return;
     showScreen("game");
     console.log("STATE:", gameState);
+
+    const titleEl = document.getElementById("game-title");
+    titleEl.textContent = `${gameState.place.intro}`;
+
+    console.log("Starting game with place:", gameState.place);
 });
 
 // Game -> End
@@ -58,13 +64,28 @@ document.getElementById("btn-replay").addEventListener("click", () => {
 
 // Show list of possible destiantions
 function renderPlaceButtons() {
-  const placeListEl = document.getElementById("place-list");
-  placeListEl.innerHTML = "";
+    const placeListEl = document.getElementById("place-list");
+    const startBtn = document.getElementById("btn-start");
 
-  PLACES.forEach((place) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = `${place.name}`;
-    placeListEl.appendChild(btn);
-  });
+    placeListEl.innerHTML = "";
+    startBtn.disabled = true;
+    gameState.place = null;
+
+    PLACES.forEach((place) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = place.name;
+
+        btn.addEventListener("click", () => {
+            // Save place selected
+            gameState.place = place;
+
+            document.getElementById("map-selection").innerHTML =
+                `Selected destination: ${place.name}<br>
+                Difficulty: ${place.difficulty}`;
+
+            startBtn.disabled = false;
+        });
+        placeListEl.appendChild(btn);
+    });
 }
