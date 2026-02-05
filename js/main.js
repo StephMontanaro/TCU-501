@@ -5,8 +5,13 @@ showScreen("menu");
 
 // Test buttons
 // Play -> Map
+//      -> Instructions
 document.getElementById("btn-play").addEventListener("click", () => {
   showScreen("map");
+});
+
+document.getElementById("btn-instructions").addEventListener("click", () => {
+  showScreen("instructions");
 });
 
 // Map -> Menu
