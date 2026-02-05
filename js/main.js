@@ -1,5 +1,6 @@
 import { showScreen } from "./router.js";
 import { gameState, resetGame, resetRound } from "./state.js";
+import { PLACES } from "./data/places.js";
 
 // Start in menu
 showScreen("menu");
@@ -11,6 +12,7 @@ console.log("INIT STATE:", gameState);
 document.getElementById("btn-play").addEventListener("click", () => {
     showScreen("map");
     console.log("STATE:", gameState);
+    console.log("PLACES:", PLACES);
 });
 
 document.getElementById("btn-instructions").addEventListener("click", () => {
@@ -47,3 +49,4 @@ document.getElementById("btn-replay").addEventListener("click", () => {
     showScreen("map");
     console.log("STATE:", gameState);
 });
+
