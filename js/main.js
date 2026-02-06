@@ -6,7 +6,6 @@ import { PLACES } from "./data/places.js";
 showScreen("menu");
 console.log("INIT STATE:", gameState);
 
-// Test buttons
 // Play -> Map
 //      -> Instructions
 document.getElementById("btn-play").addEventListener("click", () => {
@@ -31,34 +30,45 @@ document.addEventListener("click", (e) => {
         showScreen("menu");
         console.log("STATE:", gameState);
     }
+
+    if (action === "replay") {
+        gameState.place = null;
+        gameState.stepIndex = 0;
+
+        showScreen("map");
+        renderPlaceButtons();
+
+        const sel = document.getElementById("map-selection");
+        if (sel) sel.textContent = "";
+
+        console.log("REPLAY -> STATE:", gameState);
+    }
 });
 
 document.getElementById("btn-start").addEventListener("click", () => {
     if (!gameState.place) return;
+
+    // Start round
+    gameState.stepIndex = 0;
+
     showScreen("game");
     console.log("STATE:", gameState);
 
     const titleEl = document.getElementById("game-title");
-    titleEl.textContent = `${gameState.place.intro}`;
 
     console.log("Starting game with place:", gameState.place);
+
+    renderCurrentStep();
+});
+
+document.getElementById("btn-next-step").addEventListener("click", () => {
+    gameState.stepIndex += 1;
+     renderCurrentStep();
 });
 
 // Game -> End
 document.getElementById("btn-finish-round").addEventListener("click", () => {
     showScreen("end");
-    console.log("STATE:", gameState);
-});
-
-// End -> Menu (back-to-menu)
-//     -> Map
-/*document.getElementById("btn-end-to-menu").addEventListener("click", () => {
-    showScreen("menu");
-    console.log("STATE:", gameState);
-});*/
-
-document.getElementById("btn-replay").addEventListener("click", () => {
-    showScreen("map");
     console.log("STATE:", gameState);
 });
 
@@ -88,4 +98,65 @@ function renderPlaceButtons() {
         });
         placeListEl.appendChild(btn);
     });
+}
+
+// Instructions for each step
+function stepToText(step) {
+    if (step === "left") return "turn left";
+    if (step === "right") return "turn right";
+    if (step === "straight") return "go straight";
+    return step;
+}
+
+// Add prepositions to each instruction
+function prefixFor(index) {
+    if (index === 0) return "First";
+    if (index === 1) return "Then";
+    return "Next";
+}
+
+// Show current step
+function renderCurrentStep() {
+    const introEl = document.getElementById("game-intro");
+    const stepEl = document.getElementById("game-step");
+    const outroEl = document.getElementById("game-outro");
+    const nextBtn = document.getElementById("btn-next-step");
+
+    const place = gameState.place;
+    if (!place) return;
+
+    const totalSteps = place.steps.length;
+
+    // Reset texts
+    introEl.textContent = "";
+    stepEl.textContent = "";
+    outroEl.textContent = "";
+
+    // State A: Showing steps (0..totalSteps-1)
+    if (gameState.stepIndex < totalSteps) {
+        // Show intro with the first step
+        if (gameState.stepIndex === 0) {
+            introEl.textContent = place.intro;
+        }
+
+        const step = place.steps[gameState.stepIndex];
+        const prefix = prefixFor(gameState.stepIndex);
+        stepEl.textContent = `${prefix}, ${stepToText(step)}.`;
+
+        nextBtn.textContent = "Next";
+        nextBtn.disabled = false;
+        return;
+    }
+
+    // State B: Outro
+    if (gameState.stepIndex === totalSteps) {
+        outroEl.textContent = place.outro;
+
+        nextBtn.textContent = "Complete";
+        nextBtn.disabled = false;
+        return;
+    }
+
+    // State C: Complete
+    showScreen("end");
 }

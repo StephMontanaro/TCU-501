@@ -53,9 +53,11 @@
         <section id="screen-game" class = "screen hidden">
             <h2 id="game-title">Directions</h2>
 
-            <p id="game-destination"></p>
+            <p id="game-intro"></p>
+            <p id="game-step"></p>
+            <p id="game-outro"></p>
 
-            <button id="btn-finish-round">Finish (test)</button>
+           <button id="btn-next-step">Next</button>
         </section>
 
         <!-- =========================
@@ -64,7 +66,8 @@
             ========================= -->
         <section id="screen-end" class = "screen hidden">
             <h2>Complete</h2>
-            <button id="btn-replay">Play again</button>
+
+            <button data-action="replay">Play again</button>
             <button data-action="back-to-menu">Menu</button>
         </section>
 
