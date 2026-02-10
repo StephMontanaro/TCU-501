@@ -50,6 +50,12 @@ document.getElementById("btn-start").addEventListener("click", () => {
 
     // Start round
     gameState.stepIndex = 0;
+    gameState.trafficLight = null;
+    gameState.trafficShown = false;
+
+     if (gameState.place.trafficLight) {
+        selectRandomColor();
+     }
 
     showScreen("game");
     console.log("STATE:", gameState);
@@ -61,6 +67,12 @@ document.getElementById("btn-start").addEventListener("click", () => {
     renderCurrentStep();
 });
 
+// Choose the color of the traffic light
+function selectRandomColor(){
+    const lights = ["red", "yellow", "green"];
+    gameState.trafficLight = lights[Math.floor(Math.random() * lights.length)];
+}
+
 document.getElementById("btn-left").addEventListener("click", () => {
     submitAnswer("left");
 });
@@ -71,6 +83,18 @@ document.getElementById("btn-straight").addEventListener("click", () => {
 
 document.getElementById("btn-right").addEventListener("click", () => {
     submitAnswer("right");
+});
+
+document.getElementById("btn-go").addEventListener("click", () => {
+    submitTrafficAnswer("go");
+});
+
+document.getElementById("btn-careful").addEventListener("click", () => {
+    submitTrafficAnswer("careful");
+});
+
+document.getElementById("btn-stop").addEventListener("click", () => {
+    submitTrafficAnswer("stop");
 });
 
 // Game -> End
@@ -107,6 +131,7 @@ function renderPlaceButtons() {
     });
 }
 
+// Aswers for the directions
 function submitAnswer(answer) {
     const place = gameState.place;
     if (!place) return;
@@ -124,6 +149,24 @@ function submitAnswer(answer) {
     // Right answer: show next direction
     gameState.stepIndex += 1;
     renderCurrentStep();
+}
+
+// Aswers for the traffic light
+function submitTrafficAnswer(answer) {
+  if (!gameState.trafficLight || gameState.trafficShown) return;
+
+  let correctAnswer = "";
+
+  if (gameState.trafficLight === "red") correctAnswer = "stop";
+  if (gameState.trafficLight === "yellow") correctAnswer = "careful";
+  if (gameState.trafficLight === "green") correctAnswer = "go";
+
+  // Wrong answer: do nothing
+  if (answer !== correctAnswer) return;
+
+  // Right answer: mark semaphore and show next direction
+  gameState.trafficShown = true;
+  renderCurrentStep();
 }
 
 // Instructions for each step
@@ -147,6 +190,9 @@ function renderCurrentStep() {
     const stepEl = document.getElementById("game-step");
     const outroEl = document.getElementById("game-outro");
 
+    const trafficEl = document.getElementById("game-traffic");
+    const trafficControls = document.getElementById("traffic-controls");
+
     // Buttons
     const controlsEl = document.getElementById("game-controls");
     const completeBtn = document.getElementById("btn-complete");
@@ -165,6 +211,28 @@ function renderCurrentStep() {
     controlsEl.classList.remove("hidden");
     completeBtn.classList.add("hidden");
 
+    // Reset traffic ligth text
+    trafficEl.classList.add("hidden");
+    trafficControls.classList.add("hidden");
+    trafficEl.textContent = "";
+
+    // Intro
+    if (gameState.stepIndex === 0) {
+        introEl.textContent = place.intro;
+    }
+
+    // Trafic Light instruction
+    if (gameState.trafficLight && !gameState.trafficShown) {
+    controlsEl.classList.add("hidden");
+    completeBtn.classList.add("hidden");
+
+    trafficEl.textContent = `The light is ${gameState.trafficLight.toUpperCase()} now.`;
+    trafficEl.classList.remove("hidden");
+
+    trafficControls.classList.remove("hidden");
+    return;
+  }
+
     // Outro
     if (gameState.stepIndex >= totalSteps) {
         outroEl.textContent = place.outro;
@@ -173,11 +241,6 @@ function renderCurrentStep() {
         controlsEl.classList.add("hidden");
         completeBtn.classList.remove("hidden");
         return;
-    }
-
-    // Intro
-    if (gameState.stepIndex === 0) {
-        introEl.textContent = place.intro;
     }
 
     // Showing steps (0..totalSteps-1)

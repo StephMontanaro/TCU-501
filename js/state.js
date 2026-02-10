@@ -8,6 +8,7 @@ export const gameState = {
   steps: [],            // current route steps: ["straight", "left", ...]
   stepIndex: 0,         // current step index
   trafficLight: null,   // "red" | "yellow" | "green" | null
+  trafficShown: false
 };
 
 /**
