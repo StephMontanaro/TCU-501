@@ -61,13 +61,20 @@ document.getElementById("btn-start").addEventListener("click", () => {
     renderCurrentStep();
 });
 
-document.getElementById("btn-next-step").addEventListener("click", () => {
-    gameState.stepIndex += 1;
-     renderCurrentStep();
+document.getElementById("btn-left").addEventListener("click", () => {
+    submitAnswer("left");
+});
+
+document.getElementById("btn-straight").addEventListener("click", () => {
+    submitAnswer("straight");
+});
+
+document.getElementById("btn-right").addEventListener("click", () => {
+    submitAnswer("right");
 });
 
 // Game -> End
-document.getElementById("btn-finish-round").addEventListener("click", () => {
+document.getElementById("btn-complete").addEventListener("click", () => {
     showScreen("end");
     console.log("STATE:", gameState);
 });
@@ -100,6 +107,25 @@ function renderPlaceButtons() {
     });
 }
 
+function submitAnswer(answer) {
+    const place = gameState.place;
+    if (!place) return;
+
+    const totalSteps = place.steps.length;
+
+    // If not more steps left, ignore clicks
+    if (gameState.stepIndex >= totalSteps) return;
+
+    const correct = place.steps[gameState.stepIndex];
+
+    // Wrong answer: do nothing
+    if (answer !== correct) return;
+
+    // Right answer: show next direction
+    gameState.stepIndex += 1;
+    renderCurrentStep();
+}
+
 // Instructions for each step
 function stepToText(step) {
     if (step === "left") return "turn left";
@@ -120,7 +146,10 @@ function renderCurrentStep() {
     const introEl = document.getElementById("game-intro");
     const stepEl = document.getElementById("game-step");
     const outroEl = document.getElementById("game-outro");
-    const nextBtn = document.getElementById("btn-next-step");
+
+    // Buttons
+    const controlsEl = document.getElementById("game-controls");
+    const completeBtn = document.getElementById("btn-complete");
 
     const place = gameState.place;
     if (!place) return;
@@ -132,31 +161,27 @@ function renderCurrentStep() {
     stepEl.textContent = "";
     outroEl.textContent = "";
 
-    // State A: Showing steps (0..totalSteps-1)
-    if (gameState.stepIndex < totalSteps) {
-        // Show intro with the first step
-        if (gameState.stepIndex === 0) {
-            introEl.textContent = place.intro;
-        }
+    // Show direction buttons, hide Complete button
+    controlsEl.classList.remove("hidden");
+    completeBtn.classList.add("hidden");
 
-        const step = place.steps[gameState.stepIndex];
-        const prefix = prefixFor(gameState.stepIndex);
-        stepEl.textContent = `${prefix}, ${stepToText(step)}.`;
-
-        nextBtn.textContent = "Next";
-        nextBtn.disabled = false;
-        return;
-    }
-
-    // State B: Outro
-    if (gameState.stepIndex === totalSteps) {
+    // Outro
+    if (gameState.stepIndex >= totalSteps) {
         outroEl.textContent = place.outro;
 
-        nextBtn.textContent = "Complete";
-        nextBtn.disabled = false;
+        // Hide direction buttons, show Complete button
+        controlsEl.classList.add("hidden");
+        completeBtn.classList.remove("hidden");
         return;
     }
 
-    // State C: Complete
-    showScreen("end");
+    // Intro
+    if (gameState.stepIndex === 0) {
+        introEl.textContent = place.intro;
+    }
+
+    // Showing steps (0..totalSteps-1)
+    const step = place.steps[gameState.stepIndex];
+    const prefix = prefixFor(gameState.stepIndex);
+    stepEl.textContent = `${prefix}, ${stepToText(step)}.`;
 }
