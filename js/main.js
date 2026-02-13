@@ -15,8 +15,22 @@ document.getElementById("btn-play").addEventListener("click", () => {
     console.log("PLACES:", PLACES);
 });
 
+const INSTRUCTIONS = {
+    es: [
+        "Elige a dónde te diriges.",
+        "Escucha con cuidado las direcciones.",
+        "Sigue cada instrucción haciendo clic en la opción correcta hasta llegar a tu destino."
+    ],
+    en: [
+        "Choose where you are going.",
+        "Listen carefully to the directions.",
+        "Follow each instruction by clicking the correct option until you reach your destination."
+    ]
+};
+
 document.getElementById("btn-instructions").addEventListener("click", () => {
     showScreen("instructions");
+    renderInstructionsScreen();
     console.log("STATE:", gameState);
 });
 
@@ -102,6 +116,27 @@ document.getElementById("btn-complete").addEventListener("click", () => {
     showScreen("end");
     console.log("STATE:", gameState);
 });
+
+// Show instructions in english and spanish
+function renderInstructionsScreen() {
+    const esList = document.getElementById("instructions-es");
+    const enList = document.getElementById("instructions-en");
+
+    esList.innerHTML = "";
+    enList.innerHTML = "";
+
+    INSTRUCTIONS.es.forEach((line) => {
+        const li = document.createElement("li");
+        li.textContent = line;
+        esList.appendChild(li);
+    });
+
+  INSTRUCTIONS.en.forEach((line) => {
+        const li = document.createElement("li");
+        li.textContent = line;
+        enList.appendChild(li);
+    });
+}
 
 // Show list of possible destiantions
 function renderPlaceButtons() {
